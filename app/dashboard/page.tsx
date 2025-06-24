@@ -4,8 +4,17 @@ import { Table } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
+type Submission = {
+  id: number;
+  name: string;
+  category: string[] | string;
+  city: string;
+  fee: string;
+  status: string;
+};
+
 export default function DashboardPage() {
-  const [submissions, setSubmissions] = useState<any[]>([]);
+  const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 

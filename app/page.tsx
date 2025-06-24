@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { AnimatePresence } from "framer-motion";
 import { categories } from "@/constants";
 
 export default function Home() {
@@ -19,27 +18,25 @@ export default function Home() {
           </Button>
         </div>
       </div>
-      {/* Category Cards with staggered animation */}
+      {/* Category Cards */}
       <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-4xl mx-auto mb-16">
-        <AnimatePresence>
-          {categories.map((cat, i) => (
-            <div
-              key={cat}
-              className="block"
-            >
-              <Link href={`/artists?category=${cat}`} className="block">
-                <Card className="flex flex-col items-center p-6 hover:shadow-lg transition-shadow h-full">
-                  <span className="text-4xl mb-2">
-                    {cat === "Singer" ? "🎤" : cat === "Dancer" ? "💃" : cat === "Speaker" ? "🎙️" : cat === "DJ" ? "🎧" : ""}
-                  </span>
-                  <span className="text-lg font-semibold">{cat}</span>
-                </Card>
-              </Link>
-            </div>
-          ))}
-        </AnimatePresence>
+        {categories.map((cat) => (
+          <div
+            key={cat}
+            className="block"
+          >
+            <Link href={`/artists?category=${cat}`} className="block">
+              <Card className="flex flex-col items-center p-6 hover:shadow-lg transition-shadow h-full">
+                <span className="text-4xl mb-2">
+                  {cat === "Singer" ? "🎤" : cat === "Dancer" ? "💃" : cat === "Speaker" ? "🎙️" : cat === "DJ" ? "🎧" : ""}
+                </span>
+                <span className="text-lg font-semibold">{cat}</span>
+              </Card>
+            </Link>
+          </div>
+        ))}
       </section>
-      {/* Footer CTA with animation */}
+      {/* Footer CTA */}
       <div className="text-center text-muted-foreground mt-auto pb-8 footer">
         <p>Ready to perform or manage artists? <Link href="/onboard" className="underline font-medium">Onboard Now</Link></p>
       </div>

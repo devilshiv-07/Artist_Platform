@@ -47,7 +47,7 @@ export default function OnboardPage() {
   });
 
   const toggleCategory = (cat: string) => {
-    let updated = selectedCategories.includes(cat)
+    const updated = selectedCategories.includes(cat)
       ? selectedCategories.filter(c => c !== cat)
       : [...selectedCategories, cat];
     setSelectedCategories(updated);
@@ -55,14 +55,22 @@ export default function OnboardPage() {
   };
 
   const toggleLanguage = (lang: string) => {
-    let updated = selectedLanguages.includes(lang)
+    const updated = selectedLanguages.includes(lang)
       ? selectedLanguages.filter(l => l !== lang)
       : [...selectedLanguages, lang];
     setSelectedLanguages(updated);
     form.setValue("languages", updated, { shouldValidate: true });
   };
 
-  const onSubmit = async (data: any) => {
+  type FormValues = {
+    name: string;
+    bio: string;
+    category: string[];
+    languages: string[];
+    feeRange: string;
+    location: string;
+  };
+  const onSubmit = async (data: FormValues) => {
     setSubmitting(true);
     try {
       const response = await fetch("/api/artists", {
@@ -143,7 +151,6 @@ export default function OnboardPage() {
             <FormField
               control={form.control}
               name="category"
-              value={selectedCategories}
               render={() => (
                 <FormItem>
                   <FormLabel>Category * (Select all that apply)</FormLabel>
@@ -169,7 +176,6 @@ export default function OnboardPage() {
             <FormField
               control={form.control}
               name="languages"
-              value={selectedLanguages}
               render={() => (
                 <FormItem>
                   <FormLabel>Languages Spoken * (Select all that apply)</FormLabel>

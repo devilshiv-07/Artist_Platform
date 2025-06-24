@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // In-memory mock data for artists
-let artists = [
+const artists = [
   {
     id: 1,
     name: "Asha Singh",

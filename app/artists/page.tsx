@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,8 +14,18 @@ function parsePriceRange(range: string) {
   return parseInt(match[0].replace(/,/g, ""), 10);
 }
 
-export default function ArtistsPage() {
-  const [artists, setArtists] = useState<any[]>([]);
+type Artist = {
+  id: number;
+  name: string;
+  category: string[];
+  location: string;
+  feeRange: string;
+  bio: string;
+  languages: string[];
+};
+
+function ArtistsPageContent() {
+  const [artists, setArtists] = useState<Artist[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   
@@ -37,15 +47,15 @@ export default function ArtistsPage() {
       if (feeRange && feeRange !== "all") params.append("feeRange", feeRange);
       
       const response = await fetch(`/api/artists?${params}`);
-      let data = await response.json();
+      let data: Artist[] = await response.json();
       // Sort by price if needed
       if (sort === "asc") {
-        data = data.slice().sort((a: any, b: any) => parsePriceRange(a.feeRange) - parsePriceRange(b.feeRange));
+        data = data.slice().sort((a, b) => parsePriceRange(a.feeRange) - parsePriceRange(b.feeRange));
       } else if (sort === "desc") {
-        data = data.slice().sort((a: any, b: any) => parsePriceRange(b.feeRange) - parsePriceRange(a.feeRange));
+        data = data.slice().sort((a, b) => parsePriceRange(b.feeRange) - parsePriceRange(a.feeRange));
       }
       setArtists(data);
-    } catch (err) {
+    } catch {
       setError("Failed to load artists.");
     } finally {
       setLoading(false);
@@ -184,5 +194,13 @@ export default function ArtistsPage() {
         </div>
       )}
     </main>
+  );
+}
+
+export default function ArtistsPage() {
+  return (
+    <Suspense>
+      <ArtistsPageContent />
+    </Suspense>
   );
 } 
